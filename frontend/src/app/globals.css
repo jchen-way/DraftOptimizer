@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #1ec9a6;
+  --color-primary-hover: #16b290;
+  --color-app-dark: #07131f;
+  --color-app-panel: #102235;
+  --color-app-border: #2c4961;
+  --color-text-primary: #f5fbff;
+  --color-text-secondary: #b8ccde;
+  --color-budget-safe: #22c55e;
+  --color-budget-caution: #f59e0b;
+  --color-budget-critical: #ef4444;
+  --background: var(--color-app-dark);
+  --foreground: var(--color-text-primary);
+}
+
+body {
+  color: var(--foreground);
+  background:
+    radial-gradient(circle at 12% 15%, rgba(30, 201, 166, 0.16), transparent 38%),
+    radial-gradient(circle at 88% 8%, rgba(125, 211, 252, 0.14), transparent 34%),
+    linear-gradient(180deg, #07131f 0%, #050e17 100%);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, Segoe UI, sans-serif;
+}
+
+* {
+  border-color: var(--color-app-border);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: rgba(30, 201, 166, 0.25);
+  color: #ffffff;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
