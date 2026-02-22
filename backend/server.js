@@ -19,6 +19,18 @@ const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000')
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
+const allowVercelPreviews = String(process.env.ALLOW_VERCEL_PREVIEWS || '').toLowerCase() === 'true';
+
+function isVercelPreviewOrigin(origin) {
+  return /^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin);
+}
+
+function isAllowedOrigin(origin) {
+  if (!origin) return true;
+  if (allowedOrigins.includes(origin)) return true;
+  if (allowVercelPreviews && isVercelPreviewOrigin(origin)) return true;
+  return false;
+}
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/app')
   .then(() => console.log('MongoDB connected'))
@@ -28,11 +40,11 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     origin(origin, callback) {
       // Allow server-to-server requests and local tooling without an Origin header.
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      console.warn(`CORS blocked origin: ${origin}`);
+      if (isAllowedOrigin(origin)) return callback(null, true);
       return callback(new Error('Not allowed by CORS'));
     },
   })
