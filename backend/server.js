@@ -44,7 +44,10 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization'],
     origin(origin, callback) {
       // Allow server-to-server requests and local tooling without an Origin header.
-      if (isAllowedOrigin(origin)) return callback(null, true);
+      if (isAllowedOrigin(origin)) {
+        return callback(null, true);
+      }
+      console.warn(`[CORS BLOCKED] Unauthorized Origin attempted access: "${origin}"`);
       return callback(new Error('Not allowed by CORS'));
     },
   })
@@ -67,5 +70,16 @@ app.use('/api/teams', teamsRoutes);
 app.use('/api/players', playersRoutes);
 app.use('/api/draft', draftRoutes);
 app.use('/api/news', newsRoutes);
+
+app.use((err, req, res, next) => {
+  if (err.message === 'Not allowed by CORS') {
+    return res.status(403).json({
+      error: 'Origin blocked by CORS policy',
+      blockedOrigin: req.headers.origin || 'No origin provided'
+    });
+  }
+  // Pass any other non-CORS errors down the chain
+  next(err);
+});
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
