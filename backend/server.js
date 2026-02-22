@@ -32,6 +32,7 @@ app.use(
       // Allow server-to-server requests and local tooling without an Origin header.
       if (!origin) return callback(null, true);
       if (allowedOrigins.includes(origin)) return callback(null, true);
+      console.warn(`CORS blocked origin: ${origin}`);
       return callback(new Error('Not allowed by CORS'));
     },
   })

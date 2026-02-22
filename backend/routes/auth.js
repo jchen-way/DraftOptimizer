@@ -22,10 +22,11 @@ function generateRefreshToken(userId, version) {
 }
 
 function getCookieOptions(maxAge) {
+  const isProd = process.env.NODE_ENV === 'production';
   return {
     httpOnly: true,
-    sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production',
+    sameSite: isProd ? 'none' : 'strict',
+    secure: isProd,                       
     path: '/',
     maxAge,
   };
