@@ -1,5 +1,7 @@
 # DraftOptimizer
 
+[Link to App](https://draft-optimizer.vercel.app/)
+
 DraftOptimizer is a fantasy baseball auction draft workspace for running a full shadow draft:
 
 - League setup and team management
